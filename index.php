@@ -1,3 +1,20 @@
+<?php
+    $errror="";
+    $hay_post = false;
+
+    if(isset($_REQUEST['submit1'])){
+        $nombre = isset($_REQUEST['txtNombre']) ? $_REQUEST['txtNombre'] : "";
+
+        if(!empty($nombre)){
+            $nombre = preg_replace("/[^a-zA-ZáéíóúÁÉÍÓÚ]/u","",$nombre);
+
+        }
+        else{
+            $errror .= "El nombre no puede esta vácio";
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,7 +23,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="archivo2.php" method="get">
+    <form action="archivo2.php" method="post">
         <label for="nombre">Nombre Completo:</label>
         <input type="text" name="txtNombre" id="nombre"><br>
 
@@ -22,7 +39,7 @@
             <option value="Guatemala">Guatemala</option>
             <option value="Mexico">Mexico</option>
         </select><br>
-        <input type="submit" value="Enviar">
+        <input type="submit" value="Enviar" name="submit1">
     </form>
 </body>
 </html>
