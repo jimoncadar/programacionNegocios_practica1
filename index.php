@@ -1,17 +1,29 @@
 <?php
-    $errror="";
+    $error="";
     $hay_post = false;
 
     if(isset($_REQUEST['submit1'])){
+        $hay_post = true;
         $nombre = isset($_REQUEST['txtNombre']) ? $_REQUEST['txtNombre'] : "";
+        $sexo = isset($_REQUEST['radioSexo']) ? $_REQUEST['radioSexo'] : "";
+
+        $pais = isset($_REQUEST['cmbPais']) ? $_REQUEST['cmbPais'] : "";
 
         if(!empty($nombre)){
             $nombre = preg_replace("/[^a-zA-ZáéíóúÁÉÍÓÚ]/u","",$nombre);
-
         }
         else{
-            $errror .= "El nombre no puede esta vácio";
+            $error .= "El nombre no puede esta vácio<br>";
         }
+
+        if($sexo == ""){
+            $error .= "Seleccione un sexo.<br>";
+        }
+        
+        if($pais==""){
+            $error .= "Seleccione un país";
+        }
+        
     }
 ?>
 
@@ -23,7 +35,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="archivo2.php" method="post">
+    <form action="index.php" method="post">
         <label for="nombre">Nombre Completo:</label>
         <input type="text" name="txtNombre" id="nombre"><br>
 
@@ -35,11 +47,22 @@
         
         <label for="pais">País</label>
         <select name="cmbPais" id="pais">
+            <option value="">Seleccione un país</option>
             <option value="Honduras">Honduras</option>
             <option value="Guatemala">Guatemala</option>
             <option value="Mexico">Mexico</option>
         </select><br>
         <input type="submit" value="Enviar" name="submit1">
     </form>
+    <?php
+        if($error){
+            echo "<p style='color:red;'>$error</p>";
+        }
+        elseif($hay_post){
+            echo "Nombre:$nombre<br>";
+            echo "Sexo:$sexo<br>";
+            echo "País:$pais";
+        }
+    ?>
 </body>
 </html>
