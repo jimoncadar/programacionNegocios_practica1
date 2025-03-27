@@ -37,19 +37,28 @@
 
         
 
-    $sql = 'select * from cliente';
+    /* $sql = 'select * from cliente';
     $resultado = $conexion->query($sql);
     foreach($resultado as $registro){
         print($registro['nombreUsuario']);
         print($registro['sexo']);
         print($registro['pais']);
-    }
+    } */
 
-    
+    //$id = 1;    
+
+    $stm = $conexion->prepare("select * from cliente");
+    $stm->execute([]);
+    $resultados = $stm->fetchAll();
+   /*  foreach ($resultados as $registro) {
+        echo $registro['nombreUsuario'].'<br>';
+        echo $registro['sexo'].'<br>';
+        echo $registro['pais'].'<br>'.'<br>';
+    }  */
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,18 +95,21 @@
         }
     ?>
 
-
-        <table border="1">
-            <thead>
-                <th>Nombre</th>
-                <th>Sexo</th>
-                <th>País</th>
-            </thead>
-            <tbody>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tbody>
-        </table>
+    <table border="1">
+        <thead>
+            <th>Nombre</th>
+            <th>Sexo</th>
+            <th>País</th>
+        </thead>
+        <tbody>
+            <?php foreach($resultados as $registro): ?>
+            <tr>
+                <td><?php echo $registro['nombreUsuario']; ?></td>
+                <td><?php echo $registro['sexo']; ?></td>
+                <td><?php echo $registro['pais']; ?></td>
+                <?php endforeach; ?>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
