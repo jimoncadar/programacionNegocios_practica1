@@ -63,28 +63,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRUD</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-        <label for="nombre">Nombre Completo:</label>
-        <input type="text" name="txtNombre" id="nombre" value="<?php echo isset($nombre)? $nombre : "" ?>"><br>
-
-        <label for="hombre">Hombre</label>
-        <input type="radio" name="radioSexo" id="hombre" value="Hombre" <?php  if($sexo=='Hombre'){echo "checked";} ?> >
-
-        <label for="mujer">Mujer</label>
-        <input type="radio" name="radioSexo" id="mujer" value="Mujer" <?php if($sexo=='Mujer'){ echo "checked"; } ?> ><br>
-        
-        <label for="pais">País</label>
-        <select name="cmbPais" id="pais">
-            <option value="">Seleccione un país</option>
-            <option value="Honduras" <?php echo ($pais=='Honduras')? 'selected' : '' ?> >Honduras</option>
-            <option value="Guatemala" <?php echo ($pais=='Guatemala')? 'selected' : '' ?>>Guatemala</option>
-            <option value="Mexico" <?php echo  ($pais=='Mexico')? 'selected' : '' ?>>Mexico</option>
-        </select><br>
-        <input type="submit" value="Enviar" name="submit1">
-    </form>
-    <?php
+    <h1 class="text-center">CRUD</h1>
+    <div class="container">
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+            <label class="form-label" for="nombre">Nombre Completo:</label>
+            <input class="form-control" type="text" name="txtNombre" id="nombre" value="<?php echo isset($nombre)? $nombre : "" ?>"><br>
+            
+            <label class="form-label" for="hombre">Hombre</label>
+            <input class="form-check-input" type="radio" name="radioSexo" id="hombre" value="Hombre" <?php  if($sexo=='Hombre'){echo "checked";} ?> >
+            
+            <label class="form-label" for="mujer">Mujer</label>
+            <input class="form-check-input" type="radio" name="radioSexo" id="mujer" value="Mujer" <?php if($sexo=='Mujer'){ echo "checked"; } ?> ><br>
+            
+            <label class="form-label" for="pais">País</label>
+            <select class="form-select" name="cmbPais" id="pais">
+                <option value="">Seleccione un país</option>
+                <option value="Honduras" <?php echo ($pais=='Honduras')? 'selected' : '' ?> >Honduras</option>
+                <option value="Guatemala" <?php echo ($pais=='Guatemala')? 'selected' : '' ?>>Guatemala</option>
+                <option value="Mexico" <?php echo  ($pais=='Mexico')? 'selected' : '' ?>>Mexico</option>
+            </select><br>
+            <input class="btn btn-secondary" type="submit" value="Enviar" name="submit1">
+        </form>
+        <br>
+        <?php
         if($error){
             echo "<p style='color:red;'>$error</p>";
         }
@@ -93,23 +97,27 @@
             echo "Sexo:$sexo<br>";
             echo "País:$pais";
         }
-    ?>
+        ?>
 
-    <table border="1">
+    <table class="table table-striped table-hover">
         <thead>
             <th>Nombre</th>
             <th>Sexo</th>
             <th>País</th>
+            <th colspan="2">Acciones</th>
         </thead>
         <tbody>
             <?php foreach($resultados as $registro): ?>
-            <tr>
-                <td><?php echo $registro['nombreUsuario']; ?></td>
-                <td><?php echo $registro['sexo']; ?></td>
-                <td><?php echo $registro['pais']; ?></td>
-                <?php endforeach; ?>
-            </tr>
+                <tr>
+                    <td><?php echo $registro['nombreUsuario']; ?></td>
+                    <td><?php echo $registro['sexo']; ?></td>
+                    <td><?php echo $registro['pais']; ?></td>
+                    <td><a class="btn btn-primary" href="index.html?id=<?php echo $registro['codigoUsuario'] ?>">Modificar</a></td>
+                    <td><a class="btn btn-danger" href="index.html?id=<?php echo $registro['codigoUsuario'] ?>">Eliminar</a></td>
+                    <?php endforeach; ?>
+                </tr>
         </tbody>
     </table>
+</div>
 </body>
 </html>
