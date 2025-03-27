@@ -93,13 +93,13 @@
             echo "<p style='color:red;'>$error</p>";
         }
         elseif($hay_post){
-            echo "Nombre:$nombre<br>";
+            /* echo "Nombre:$nombre<br>";
             echo "Sexo:$sexo<br>";
-            echo "País:$pais";
+            echo "País:$pais"; */
         }
         ?>
 
-    <table class="table table-striped table-hover">
+    <table class="table table-bordered table-hover">
         <thead>
             <th>Nombre</th>
             <th>Sexo</th>
