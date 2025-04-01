@@ -10,9 +10,7 @@
         $hay_post = true;
         $nombre = isset($_REQUEST['txtNombre']) ? $_REQUEST['txtNombre'] : "";
         $sexo = isset($_REQUEST['radioSexo']) ? $_REQUEST['radioSexo'] : "";
-        
         $pais = isset($_REQUEST['cmbPais']) ? $_REQUEST['cmbPais'] : "";
-        
 
         if(!empty($nombre)){
             $nombre = preg_replace("/[^a-zA-ZáéíóúÁÉÍÓÚ]/u","",$nombre);
@@ -28,7 +26,12 @@
         if($pais==""){
             $error .= "Seleccione un país";
         }
-        
+
+        if(!$error){
+            $stm_insertarRegistro = $conexion->prepare("insert into cliente(nombreUsuario, sexo, pais) values(:nombre, :sexo, :pais)");
+            $stm_insertarRegistro->execute([':nombre'=>$nombre, ':sexo'=>$sexo, ':pais'=>$pais]);
+            
+        }
     }
 
 
@@ -104,6 +107,7 @@
             </select><br>
             <input class="btn btn-secondary" type="submit" value="Enviar" name="submit1">
             <input class="btn btn-secondary" type="submit" value="Modificar" name="submit2">
+            <input type="reset" value="Cancelar">
         </form>
         <br>
         <?php
