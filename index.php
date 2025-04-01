@@ -1,4 +1,6 @@
 <?php
+    require 'conexion.php';
+
     $error="";
     $hay_post = false;
     $nombre = "";
@@ -29,11 +31,26 @@
         
     }
 
-    $conexion = new PDO(
-        "mysql:dbname=programacionnegocios;127.0.0.1,",
-        "root",
-        "123456789"    
-    );
+
+
+    if(isset($_REQUEST['id']) && isset($_REQUEST['op'])){
+        $id = $_REQUEST['id'];
+        $op = $_REQUEST['op'];
+
+        if($op == 'm'){
+            // $stm_seleccionarRegistro = $conexion->prepare("update cliente set nombreUsuario=:nombre, sexo=:sexo, pais:pais");
+            $stm_seleccionarRegistro = $conexion->prepare("select * from cliente where codigoUsuario=:id");
+            $stm_seleccionarRegistro->execute([':id'=>$id]);
+            $resultado = $stm_seleccionarRegistro->fetch();
+            $codigoUsuario = $resultado['codigoUsuario'];
+            $nombre = $resultado['nombreUsuario'];
+            $sexo = $resultado['sexo'];
+            $pais = $resultado['pais'];
+
+        }
+    }
+
+    
 
         
 
@@ -86,11 +103,12 @@
                 <option value="Mexico" <?php echo  ($pais=='Mexico')? 'selected' : '' ?>>Mexico</option>
             </select><br>
             <input class="btn btn-secondary" type="submit" value="Enviar" name="submit1">
+            <input class="btn btn-secondary" type="submit" value="Modificar" name="submit2">
         </form>
         <br>
         <?php
         if($error){
-            echo "<p style='color:red;'>$error</p>";
+            echo "<p class='alert alert-danger' role='alert'>$error</p>";
         }
         elseif($hay_post){
             /* echo "Nombre:$nombre<br>";
@@ -112,8 +130,8 @@
                     <td><?php echo $registro['nombreUsuario']; ?></td>
                     <td><?php echo $registro['sexo']; ?></td>
                     <td><?php echo $registro['pais']; ?></td>
-                    <td><a class="btn btn-primary" href="index.html?id=<?php echo $registro['codigoUsuario'] ?>">Modificar</a></td>
-                    <td><a class="btn btn-danger" href="index.html?id=<?php echo $registro['codigoUsuario'] ?>">Eliminar</a></td>
+                    <td><a class="btn btn-primary" href="index.php?id=<?php echo $registro['codigoUsuario'] ?>&op=m">Modificar</a></td>
+                    <td><a class="btn btn-danger" href="index.php?id=<?php echo $registro['codigoUsuario'] ?>&op=e">Eliminar</a></td>
                     <?php endforeach; ?>
                 </tr>
         </tbody>
