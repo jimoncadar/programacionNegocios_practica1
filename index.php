@@ -6,6 +6,7 @@
     $nombre = "";
     $sexo = "";
     $pais = "";
+    // $codigoUsuario = null;
     if(isset($_REQUEST['submit1'])){
         $hay_post = true;
         $nombre = isset($_REQUEST['txtNombre']) ? $_REQUEST['txtNombre'] : "";
@@ -30,11 +31,40 @@
         if(!$error){
             $stm_insertarRegistro = $conexion->prepare("insert into cliente(nombreUsuario, sexo, pais) values(:nombre, :sexo, :pais)");
             $stm_insertarRegistro->execute([':nombre'=>$nombre, ':sexo'=>$sexo, ':pais'=>$pais]);
-            
         }
     }
     
-    
+    if(isset($_REQUEST['submit2'])){
+        $codigoUsuario = $_REQUEST['id'];
+        $nombre = isset($_REQUEST['txtNombre']) ? $_REQUEST['txtNombre'] : "";
+        $sexo = isset($_REQUEST['radioSexo']) ? $_REQUEST['radioSexo'] : "";
+        $pais = isset($_REQUEST['cmbPais']) ? $_REQUEST['cmbPais'] : "";
+
+        if(!empty($nombre)){
+            $nombre = preg_replace("/[^a-zA-ZáéíóúÁÉÍÓÚ]/u","",$nombre);
+        }
+        else{
+            $error .= "El nombre no puede esta vácio<br>";
+        }
+
+        if($sexo == ""){
+            $error .= "Seleccione un sexo.<br>";
+        }
+        
+        if($pais==""){
+            $error .= "Seleccione un país";
+        }
+
+        if(!$error){
+            $stm_modificar = $conexion->prepare("update cliente set nombreUsuario = :nombre, sexo = :sexo, pais = :pais where codigoUsuario = :id");
+            $stm_modificar->execute([
+                ':nombre'=>$nombre, 
+                ':sexo'=>$sexo, 
+                ':pais'=>$pais,
+                ':id'=> $codigoUsuario
+            ]);
+        }
+    }
     
     if(isset($_REQUEST['id']) && isset($_REQUEST['op'])){
         $id = $_REQUEST['id'];
@@ -49,7 +79,6 @@
             $nombre = $resultado['nombreUsuario'];
             $sexo = $resultado['sexo'];
             $pais = $resultado['pais'];
-            
         }
         else if($op == 'e'){
             $stm_eliminar = $conexion->prepare("delete from cliente where codigoUsuario = :id");
@@ -93,6 +122,7 @@
     <h1 class="text-center">CRUD</h1>
     <div class="container">
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+            <input type="hidden" name="id" value="<?php echo isset($codigoUsuario)? $codigoUsuario : "" ?>">
             <label class="form-label" for="nombre">Nombre Completo:</label>
             <input class="form-control" type="text" name="txtNombre" id="nombre" value="<?php echo isset($nombre)? $nombre : "" ?>"><br>
             
