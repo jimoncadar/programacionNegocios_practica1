@@ -31,6 +31,8 @@
         if(!$error){
             $stm_insertarRegistro = $conexion->prepare("insert into cliente(nombreUsuario, sexo, pais) values(:nombre, :sexo, :pais)");
             $stm_insertarRegistro->execute([':nombre'=>$nombre, ':sexo'=>$sexo, ':pais'=>$pais]);
+            header("Location: index.php?mensaje=registroGuardado");
+            exit();
         }
     }
     
@@ -63,6 +65,8 @@
                 ':pais'=>$pais,
                 ':id'=> $codigoUsuario
             ]);
+            header("Location: index.php?mensaje=registroModificado");
+            exit();
         }
     }
     
@@ -83,6 +87,8 @@
         else if($op == 'e'){
             $stm_eliminar = $conexion->prepare("delete from cliente where codigoUsuario = :id");
             $stm_eliminar->execute([':id'=>$id]);
+            header("Location: index.php?mensaje=registroEliminado");
+            exit();
         }
     }
 
@@ -139,19 +145,27 @@
                 <option value="Guatemala" <?php echo ($pais=='Guatemala')? 'selected' : '' ?>>Guatemala</option>
                 <option value="Mexico" <?php echo  ($pais=='Mexico')? 'selected' : '' ?>>Mexico</option>
             </select><br>
-            <input class="btn btn-secondary" type="submit" value="Enviar" name="submit1">
-            <input class="btn btn-secondary" type="submit" value="Modificar" name="submit2">
-            <input type="reset" value="Cancelar">
+            <input class="btn btn-primary" type="submit" value="Enviar" name="submit1">
+            <input class="btn btn-dark" type="submit" value="Modificar" name="submit2">
+            <a class="btn btn-secondary" href="index.php">Limpiar</a>
         </form>
         <br>
         <?php
         if($error){
             echo "<p class='alert alert-danger' role='alert'>$error</p>";
         }
-        elseif($hay_post){
-            /* echo "Nombre:$nombre<br>";
-            echo "Sexo:$sexo<br>";
-            echo "País:$pais"; */
+
+        if(isset($_REQUEST['mensaje'])){
+            $mensaje = $_REQUEST['mensaje'];
+            if($mensaje=='registroGuardado'){
+                echo "<p class='alert alert-success'>Registro guardado.</p>";
+            }
+            elseif($mensaje == 'registroModificado'){
+                echo "<p class='alert alert-success'>Registro modificado.</p>";
+            }
+            elseif($mensaje=='registroEliminado'){
+                echo "<p class='alert alert-success'>Registro eliminado.</p>";
+            }
         }
         ?>
 
