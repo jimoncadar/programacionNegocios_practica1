@@ -6,7 +6,7 @@
     $nombre = "";
     $sexo = "";
     $pais = "";
-    // $codigoUsuario = null;
+    $codigoUsuario = null;
     if(isset($_REQUEST['submit1'])){
         $hay_post = true;
         $nombre = isset($_REQUEST['txtNombre']) ? $_REQUEST['txtNombre'] : "";
@@ -123,6 +123,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRUD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <h1 class="text-center">CRUD</h1>
@@ -146,28 +147,45 @@
                 <option value="Mexico" <?php echo  ($pais=='Mexico')? 'selected' : '' ?>>Mexico</option>
             </select><br>
             <input class="btn btn-primary" type="submit" value="Enviar" name="submit1">
-            <input class="btn btn-dark" type="submit" value="Modificar" name="submit2">
-            <a class="btn btn-secondary" href="index.php">Limpiar</a>
+            <?php
+                if($codigoUsuario){
+                    echo '<input class="btn btn-dark" type="submit" value="Modificar" name="submit2">';
+                }
+                ?>
+            <a class="btn btn-secondary" href="index.php">Cancelar</a>
         </form>
         <br>
-        <?php
-        if($error){
-            echo "<p class='alert alert-danger' role='alert'>$error</p>";
-        }
+        <?php if($error):  ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?php echo "<p>$error</p>"; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+        
 
-        if(isset($_REQUEST['mensaje'])){
-            $mensaje = $_REQUEST['mensaje'];
-            if($mensaje=='registroGuardado'){
-                echo "<p class='alert alert-success'>Registro guardado.</p>";
-            }
-            elseif($mensaje == 'registroModificado'){
-                echo "<p class='alert alert-success'>Registro modificado.</p>";
-            }
-            elseif($mensaje=='registroEliminado'){
-                echo "<p class='alert alert-success'>Registro eliminado.</p>";
-            }
-        }
+        <?php
+            if(isset($_REQUEST['mensaje'])){
+                $mensaje = $_REQUEST['mensaje'];
         ?>
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                <?php
+                    if($mensaje=='registroGuardado'){
+                        echo "<p>Registro guardado.</p>";
+                    }
+                    elseif($mensaje == 'registroModificado'){
+                        echo "<p>Registro modificado.</p>";
+                    }
+                    elseif($mensaje=='registroEliminado'){
+                        echo "<p>Registro eliminado.</p>";
+                    }
+                ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php
+            }
+        ?>
+            
+        
 
     <table class="table table-bordered table-hover">
         <thead>
@@ -183,7 +201,7 @@
                     <td><?php echo $registro['sexo']; ?></td>
                     <td><?php echo $registro['pais']; ?></td>
                     <td><a class="btn btn-primary" href="index.php?id=<?php echo $registro['codigoUsuario'] ?>&op=m">Modificar</a></td>
-                    <td><a class="btn btn-danger" href="index.php?id=<?php echo $registro['codigoUsuario'] ?>&op=e">Eliminar</a></td>
+                    <td><a class="btn btn-danger" href="index.php?id=<?php echo $registro['codigoUsuario'] ?>&op=e" onclick="return confirm('Desea eliminar el registro');">Eliminar</a></td>
                     <?php endforeach; ?>
                 </tr>
         </tbody>
