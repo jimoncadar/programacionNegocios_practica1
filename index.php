@@ -33,13 +33,13 @@
             
         }
     }
-
-
-
+    
+    
+    
     if(isset($_REQUEST['id']) && isset($_REQUEST['op'])){
         $id = $_REQUEST['id'];
         $op = $_REQUEST['op'];
-
+        
         if($op == 'm'){
             // $stm_seleccionarRegistro = $conexion->prepare("update cliente set nombreUsuario=:nombre, sexo=:sexo, pais:pais");
             $stm_seleccionarRegistro = $conexion->prepare("select * from cliente where codigoUsuario=:id");
@@ -49,7 +49,11 @@
             $nombre = $resultado['nombreUsuario'];
             $sexo = $resultado['sexo'];
             $pais = $resultado['pais'];
-
+            
+        }
+        else if($op == 'e'){
+            $stm_eliminar = $conexion->prepare("delete from cliente where codigoUsuario = :id");
+            $stm_eliminar->execute([':id'=>$id]);
         }
     }
 
